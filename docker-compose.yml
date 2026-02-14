@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+    - db_data:/var/lib/postgresql/data
+    - ./deploy/postgres-init:/docker-entrypoint-initdb.d
+    ports:
+    - 5432:5432
+  redis:
+    image: redis:7
+    ports:
+    - 6379:6379
+  backend:
+    build: ./backend
+    env_file: .env
+    depends_on:
+    - db
+    - redis
+    volumes: &id001
+    - media_data:/app/media
+    - ./deploy/creds/arcane-legacy.json:/app/deploy/creds/arcane-legacy.json:ro
+    command: 'sh -c " python manage.py migrate && python manage.py seed_rhythms &&
+      gunicorn app.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
+      "
+
+      '
+    ports:
+    - 8000:8000
+  worker:
+    build: ./backend
+    env_file: .env
+    depends_on:
+    - backend
+    - redis
+    volumes: *id001
+    command: celery -A app.celery_app worker -l info --concurrency=2
+  frontend:
+    build: ./frontend
+    environment:
+    - VITE_API_BASE=/api
+    depends_on:
+    - backend
+  nginx:
+    image: nginx:1.27-alpine
+    depends_on:
+    - backend
+    - frontend
+    ports:
+    - 8080:80
+    volumes:
+    - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    - media_data:/var/www/media:ro
+volumes:
+  db_data: null
+  media_data: null

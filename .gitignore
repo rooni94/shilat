@@ -1,0 +1,75 @@
+﻿# ------------------------------
+# OS / Editor
+# ------------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ------------------------------
+# Environment / Secrets
+# ------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+.venv/, venv/, env/
+# Service account / cloud credentials
+arcane-legacy.json
+deploy/creds/*.json
+backend/deploy/creds/*.json
+
+# ------------------------------
+# Python
+# ------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+backend/media/, media/, backend/staticfiles/
+# Virtual envs
+.venv/
+venv/
+env/
+.vscode/, .idea/, .DS_Store,
+# Django / runtime artifacts
+backend/staticfiles/
+backend/media/
+media/
+*.sqlite3
+__pycache__/, *.py[cod], .pytest_cache/, .mypy_cache/, .ruff_cache/
+# ------------------------------
+# Node / Frontend
+# ------------------------------
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+build/
+.npm/
+.pnpm-store/
+.yarn/
+
+# ------------------------------
+# Logs / temp
+# ------------------------------
+*.log
+logs/
+tmp/
+*.tmp
+
+# ------------------------------
+# Local tooling leftovers
+# ------------------------------
+tmp_edit.py

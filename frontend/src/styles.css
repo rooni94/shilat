@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-geo {
+  background-image: radial-gradient(rgba(193,154,107,0.10) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
